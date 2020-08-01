@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,6 @@ import com.xdomain.user.model.ResponseUserStatus;
 import com.xdomain.user.model.UserRequest;
 import com.xdomain.user.model.UserResponse;
 import com.xdomain.user.service.UserService;
-import com.xdomain.user.utils.Constants;
 
 @RestController
 @Validated
@@ -33,10 +30,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	
-//	@Autowired
-//	private ConversionService convService;
-//	
 	
 	@GetMapping("/users")
 	@ResponseStatus(HttpStatus.OK)
@@ -55,7 +48,7 @@ public class UserController {
 		
 	@PostMapping(value = "/user", consumes = "application/json" , produces = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public UserResponse createUser(@RequestBody UserRequest user) {
+	public UserResponse createUser(@Valid @RequestBody UserRequest user) {
 		
 		return userService.createUser(user);
 	}
@@ -75,6 +68,8 @@ public class UserController {
 		return userService.deleteUser(id);
 	
 	}
+	
+	
 	
 	
 }

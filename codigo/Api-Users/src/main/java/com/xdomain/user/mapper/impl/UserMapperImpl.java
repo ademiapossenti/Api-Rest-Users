@@ -6,12 +6,15 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
+import org.springframework.stereotype.Component;
 
 import com.xdomain.user.entities.UserEntity;
 import com.xdomain.user.mapper.UserMapper;
 import com.xdomain.user.model.UserRequest;
 import com.xdomain.user.model.UserResponse;
 
+
+@Component
 public class UserMapperImpl implements UserMapper{
 
 	

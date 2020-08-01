@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.xdomain.user.entities.UserEntity;
 import com.xdomain.user.exception.UserException;
 import com.xdomain.user.mapper.UserMapper;
-import com.xdomain.user.mapper.impl.UserMapperImpl;
 import com.xdomain.user.model.ResponseUserStatus;
 import com.xdomain.user.model.UserRequest;
 import com.xdomain.user.model.UserResponse;
@@ -24,11 +23,14 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	UserMapper userMapper;
+
 
 	@Override
 	public List<UserResponse> getUsers() {
-		UserMapper userMapper = new UserMapperImpl();
-
+		
 		List<UserEntity> user = userRepository.findAll();
 
 		return userMapper.convertEntityToListDto(user);
@@ -37,7 +39,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserResponse getUserById(UUID id) {
 
-		UserMapper userMapper = new UserMapperImpl();
 
 		UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND.value(),
 				String.format("The user with id %s not found", id), HttpStatus.NOT_FOUND));
@@ -51,7 +52,6 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserResponse createUser(UserRequest userRequest) {
 
-		UserMapper userMapper = new UserMapperImpl();
 
 		UserEntity user = userMapper.convertToEntity(userRequest);
 
@@ -76,7 +76,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseUserStatus updateUser(UUID id, UserRequest userRequest) {
 
-		UserMapper userMapper = new UserMapperImpl();
 
 		UserEntity userEntity = userRepository.findById(id)
 				.orElseThrow(() -> new UserException(HttpStatus.PRECONDITION_FAILED.value(),

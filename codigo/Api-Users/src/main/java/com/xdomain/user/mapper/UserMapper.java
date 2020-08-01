@@ -7,6 +7,7 @@ import com.xdomain.user.entities.UserEntity;
 import com.xdomain.user.model.UserRequest;
 import com.xdomain.user.model.UserResponse;
 
+
 public interface UserMapper {
 
 	UserEntity convertToEntity(UserRequest userRequest, UserEntity userEntity);

@@ -3,7 +3,6 @@ package com.xdomain.user.controller;
 import javax.persistence.EntityNotFoundException;
 import javax.xml.bind.TypeConstraintException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -18,13 +17,12 @@ import com.xdomain.user.utils.Constants;
 @ControllerAdvice
 public class UserExceptionHandler {
 
-	
-	@Autowired
-	Error error;
+
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Error> handlerException(Exception e) {
 
+		Error error= new Error();
 		error.setCode(Constants.USER_PREFIX_ERROR + "-" + HttpStatus.INTERNAL_SERVER_ERROR.value());
 		error.setDescription(e.getMessage());
 
@@ -34,6 +32,7 @@ public class UserExceptionHandler {
 	
 	@ExceptionHandler(TypeConstraintException.class)
 	public ResponseEntity<Error> handlerTypeConstraintException(TypeConstraintException e) {
+		Error error= new Error();
 
 		error.setCode(Constants.USER_PREFIX_ERROR + "-" + e.getErrorCode());
 		error.setDescription(e.getMessage());
@@ -44,6 +43,7 @@ public class UserExceptionHandler {
 
 	@ExceptionHandler(UserException.class)
 	public ResponseEntity<Error> handlerUserException(UserException e) {
+		Error error= new Error();
 
 		error.setCode(Constants.USER_PREFIX_ERROR + "-" +e.getCode());
 		error.setDescription(e.getDescription());
@@ -54,6 +54,7 @@ public class UserExceptionHandler {
 	
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<Error> handlerUserException(EntityNotFoundException e) {
+		Error error= new Error();
 
 		error.setCode(Constants.USER_PREFIX_ERROR + "-" + HttpStatus.NOT_FOUND.value());
 		error.setDescription(e.getMessage());
@@ -64,6 +65,7 @@ public class UserExceptionHandler {
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ResponseEntity<Error> handlerUserException(HttpRequestMethodNotSupportedException e) {
+		Error error= new Error();
 
 		error.setCode(Constants.USER_PREFIX_ERROR + "-" + HttpStatus.METHOD_NOT_ALLOWED.value());
 		error.setDescription(e.getMessage());
@@ -75,6 +77,7 @@ public class UserExceptionHandler {
 		
 	@ExceptionHandler(JsonProcessingException.class)
 	public ResponseEntity<Error> handlerUserException(JsonProcessingException e) {
+		Error error= new Error();
 
 		error.setCode(Constants.USER_PREFIX_ERROR + "-" + HttpStatus.INTERNAL_SERVER_ERROR.value());
 		error.setDescription(e.getMessage());
