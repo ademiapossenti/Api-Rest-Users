@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class UserController {
 	
 	@GetMapping("/users")
 	@ResponseStatus(HttpStatus.OK)
+ @PreAuthorize("hasRole('ROLE_USER')")
 	public List<UserResponse> getUsers(){
 		
 		return userService.getUsers(); 
@@ -40,6 +42,7 @@ public class UserController {
 	
 	@GetMapping("/user/{id}")
 	@ResponseStatus(HttpStatus.OK)
+	 @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public UserResponse getUserById(@Valid @PathVariable(value = "id") UUID id){
 		
 		return userService.getUserById(id);
@@ -48,6 +51,7 @@ public class UserController {
 		
 	@PostMapping(value = "/user", consumes = "application/json" , produces = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
+
 	public UserResponse createUser(@Valid @RequestBody UserRequest user) {
 		
 		return userService.createUser(user);
