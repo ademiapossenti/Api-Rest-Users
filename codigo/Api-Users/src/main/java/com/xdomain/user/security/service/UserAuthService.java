@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@Service
+@Service("UserAuthService")
 public class UserAuthService implements UserDetailsService{
 
 	@Autowired
@@ -54,7 +54,7 @@ public class UserAuthService implements UserDetailsService{
 			throw new UserAuthenticationException("The username %s no has any role assigned");
 		}
 		
-		return new User(username, user.getPassword(), user.getEnabled(), true, true, true, roles);
+		return new User(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, roles);
 		
 	}
 	

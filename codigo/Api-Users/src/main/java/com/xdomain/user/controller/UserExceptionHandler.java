@@ -5,6 +5,7 @@ import javax.xml.bind.TypeConstraintException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +30,19 @@ public class UserExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<Error> handlerAccessDeniedException(AccessDeniedException e) {
+
+		Error error= new Error();
+		error.setCode(Constants.USER_PREFIX_ERROR + "-" + HttpStatus.FORBIDDEN.value());
+		error.setDescription(e.getMessage() + " - " +  e.getCause());
+
+		return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+
+	}
+	
+	
 	
 	@ExceptionHandler(TypeConstraintException.class)
 	public ResponseEntity<Error> handlerTypeConstraintException(TypeConstraintException e) {

@@ -34,7 +34,7 @@ public class UserController {
 	
 	@GetMapping("/users")
 	@ResponseStatus(HttpStatus.OK)
- @PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<UserResponse> getUsers(){
 		
 		return userService.getUsers(); 
