@@ -31,18 +31,20 @@ public class UserExceptionHandler {
 
 	}
 	
+	
+	
+	
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<Error> handlerAccessDeniedException(AccessDeniedException e) {
-
 		Error error= new Error();
-		error.setCode(Constants.USER_PREFIX_ERROR + "-" + HttpStatus.FORBIDDEN.value());
-		error.setDescription(e.getMessage() + " - " +  e.getCause());
+		
+		error.setCode(Constants.USER_PREFIX_ERROR + "-" + HttpStatus.UNAUTHORIZED.value());
+		error.setDescription(e.getMessage());
 
-		return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 
 	}
-	
-	
+
 	
 	@ExceptionHandler(TypeConstraintException.class)
 	public ResponseEntity<Error> handlerTypeConstraintException(TypeConstraintException e) {

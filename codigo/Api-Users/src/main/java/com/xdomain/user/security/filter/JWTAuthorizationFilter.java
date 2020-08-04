@@ -3,19 +3,21 @@ package com.xdomain.user.security.filter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,11 +26,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.apachecommons.CommonsLog;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
@@ -40,6 +39,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
+		
+	
 		String header = request.getHeader("Authorization");
 		
 		if(header == null || !header.startsWith("Bearer")) {
@@ -55,15 +56,25 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		Claims token = null;
 		try {
 			
+			
+	
+			
 			 JwtParser jwtParser = Jwts.parser().setSigningKey("Mi.clave.Secreta.12345.JJ".getBytes());
 			 Jws<Claims> claimsJws = jwtParser.parseClaimsJws(header);
 			 Claims claims = claimsJws.getBody();
 			 token = claims;
 			
 			validToken = true;
-		}catch(JwtException | IllegalArgumentException e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+		}catch(ArrayIndexOutOfBoundsException |JwtException | IllegalArgumentException e) {
+			Map<String, Object> body = new HashMap<String, Object>();
+			body.put("description", "Forbidden");
+			body.put("code", "USR-" + HttpStatus.FORBIDDEN);
+			response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+			
+			response.setStatus(HttpStatus.FORBIDDEN.value());
+			response.setContentType("application/json");
+			
+			return;
 		}
 		
 
@@ -72,6 +83,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		if(validToken) {
 			String username = token.getSubject();
 			Object roles = token.get("authorities");
+			
+			
 			
 			//Necesario porque GrantedAuthority de spring security es una coleccion.
 			Collection<? extends GrantedAuthority> authorities = 

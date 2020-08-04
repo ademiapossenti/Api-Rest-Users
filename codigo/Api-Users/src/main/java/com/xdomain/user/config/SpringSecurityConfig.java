@@ -15,8 +15,6 @@ import com.xdomain.user.security.filter.JWTAuthenticationFilter;
 import com.xdomain.user.security.filter.JWTAuthorizationFilter;
 import com.xdomain.user.security.service.UserAuthService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)

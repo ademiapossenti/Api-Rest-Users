@@ -51,7 +51,7 @@ public class UserController {
 		
 	@PostMapping(value = "/user", consumes = "application/json" , produces = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public UserResponse createUser(@Valid @RequestBody UserRequest user) {
 		
 		return userService.createUser(user);
@@ -59,7 +59,7 @@ public class UserController {
 	
 	@PutMapping(value = "/user/{id}" , consumes = "application/json",  produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseUserStatus updateUser(@PathVariable(value = "id")UUID id ,  @RequestBody UserRequest userRequest){
 		
 		 return userService.updateUser(id, userRequest);
@@ -68,7 +68,7 @@ public class UserController {
 	
 	@DeleteMapping(value = "/user/{id}", produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseUserStatus deleteUser(@PathVariable(value = "id") UUID id) {
 		
 		return userService.deleteUser(id);

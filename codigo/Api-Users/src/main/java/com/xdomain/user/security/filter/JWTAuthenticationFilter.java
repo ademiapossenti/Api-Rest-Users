@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,12 +19,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xdomain.user.security.entities.UserAuthEntity;
+import com.xdomain.user.utils.Constants;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -41,7 +42,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-
+		
 		Collection<? extends GrantedAuthority> roles = authResult.getAuthorities();
 
 		Claims claims = Jwts.claims();
@@ -62,7 +63,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
-		response.setStatus(200);
+		response.setStatus(HttpStatus.OK.value());
 		response.setContentType("application/json");
 
 	}
@@ -73,13 +74,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
-	
+		
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("description", "Unauthorized");
-		body.put("code", 401);
+		body.put("code", Constants.USER_PREFIX_ERROR + HttpStatus.UNAUTHORIZED);
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
 		
-		response.setStatus(401);
+		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		response.setContentType("application/json");
 	}
 
@@ -87,6 +88,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
 
+		
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
@@ -98,8 +100,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				 user = new ObjectMapper().readValue(request.getInputStream(), UserAuthEntity.class);
 				 username = user.getUsername();
 				 password = user.getPassword();
-				 
-				 
+				
+ 
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
