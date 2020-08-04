@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "c2bf3462-3a06-4e6e-b22b-929bbb79e202",
+		"name": "Api-Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getAllUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/aa74a730-6393-43d3-9653-e742f462aebc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"aa74a730-6393-43d3-9653-e742f462aebc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Momo\",\n    \"email\": \"momo@alddffffdgo.com1\",\n    \"password\": \"pass123\",\n    \"phones\": [\n        {\n            \"number\": 444,\n            \"citycode\": 14,\n            \"countryCode\": 54\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create user - OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIlJPTEVfVVNFUlwifV0iLCJzdWIiOiJhZGVtaWEiLCJpYXQiOjE1OTY0NTg0NzgsImV4cCI6MTU5NjQ3Mjg3OH0.CJK4yj4UFcRk3CgZcngQsI6sCKOLU06-ipt5mu79tvdbdczuHUVh4XSXRo_N0YNTnp3-22kdU7XNqonQY4h_Kg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Moasdfmo\",\n    \"email\": \"masdfomo@alddffffdgo.com1\",\n    \"password\": \"Pass12\",\n    \"phones\": [\n        {\n            \"number\": 444,\n            \"citycode\": 14,\n            \"countryCode\": 54\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 03 Aug 2020 12:53:23 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"b038d675-670c-4355-992a-80e8f67ee22a\",\n    \"name\": \"Moasdfmo\",\n    \"email\": \"masdfomo@alddffffdgo.com1\",\n    \"password\": \"Pass12\",\n    \"phones\": [\n        {\n            \"id\": 4,\n            \"number\": \"444\",\n            \"citycode\": \"14\",\n            \"countryCode\": \"54\"\n        }\n    ],\n    \"userCreated\": \"2020-08-03T09:53:23.809\",\n    \"userModified\": \"2020-08-03T09:53:23.809\",\n    \"active\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "update User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Momo\",\n        \"email\": \"algo@com1111\",\n        \"password\": \"pass1111\",\n        \"phones\": [\n            {\n                \"id\": 1,\n                \"number\": \"123\",\n                \"citycode\": \"1\",\n                \"countryCode\": \"54\"\n            }\n        ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/aa74a730-6393-43d3-9653-e742f462aebc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"aa74a730-6393-43d3-9653-e742f462aebc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user by email",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/aa74a730-6393-43d3-9653-e742f462aebc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"aa74a730-6393-43d3-9653-e742f462aebc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch User",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"ttttttt\",\n    \"password\": \"123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/domail@algo.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"domail@algo.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
