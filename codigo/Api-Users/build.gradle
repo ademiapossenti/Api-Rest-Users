@@ -30,6 +30,10 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	
+	 testCompile 'junit:junit:4.12'
+    compile 'junit:junit:4.12'
+	//testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M3")
 	// https://mvnrepository.com/artifact/javax.validation/validation-api
 	compile group: 'javax.validation', name: 'validation-api', version: '2.0.0.Final'
 	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
@@ -40,9 +44,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
 	
-
-	
 }
+
 
 test {
 	useJUnitPlatform()

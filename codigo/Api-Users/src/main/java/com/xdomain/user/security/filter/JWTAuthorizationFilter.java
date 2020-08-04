@@ -47,35 +47,20 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 			return;
 		}
 		
-		log.info(">>>>>>>>>>>>>>>>>>>> HEADER ----- {}" ,header);
 		
 		header = header.replace("Bearer ", "");
 		
-		log.info(">>>>>>>>>>>>>>>>>>>> HEADER-PROCESADO ----- {}" ,header);
 		
 		boolean validToken = false;
 		Claims token = null;
 		try {
 			
 			 JwtParser jwtParser = Jwts.parser().setSigningKey("Mi.clave.Secreta.12345.JJ".getBytes());
-			
-			 log.info(">>>>>>>>>>>>>>>>>>>> PARSEANDO HEADER JWT ----- {}" ,jwtParser.toString());
-			 
 			 Jws<Claims> claimsJws = jwtParser.parseClaimsJws(header);
-			 
-			 log.info(">>>>>>>>>>>>>>>>>>>> PARSEANDO LOS CLAIMS DEL  HEADER JWT ----- {}" ,claimsJws);
-			 
 			 Claims claims = claimsJws.getBody();
-			 
-			 log.info(">>>>>>>>>>>>>>>>>>>> OBTENIENDO LOS CLAIMS DEL  HEADER JWT ----- {}" ,claims);
-			 
 			 token = claims;
-			 
-			 log.info(">>>>>>>>>>>>>>>>>>>> TOKEN/CLAIMS ----- {}" ,claims);
 			
 			validToken = true;
-			
-			 log.info(">>>>>>>>>>>>>>>>>>>>TOKEN VALIDO?? ----- {}" ,validToken);
 		}catch(JwtException | IllegalArgumentException e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
@@ -95,7 +80,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 			
 			authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
 		}
-		//Manejamos el contexto de seguridad, autentica al usaurio dentro del request.
+		//Se maneja el contexto de seguridad, autentica al usaurio dentro del request.
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		chain.doFilter(request, response);
 		
