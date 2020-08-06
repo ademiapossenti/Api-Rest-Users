@@ -1,15 +1,21 @@
 package com.xdomain.user.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -17,8 +23,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xdomain.user.entities.PhoneEntity;
 import com.xdomain.user.entities.UserEntity;
+import com.xdomain.user.exception.UserException;
 import com.xdomain.user.model.ResponseUserStatus;
 import com.xdomain.user.model.UserRequest;
 import com.xdomain.user.model.UserResponse;
@@ -51,7 +59,7 @@ public class UserServiceImplTest {
 	UserResponse userResponse = null;
 	List<PhoneEntity> phones = null;
 	UserResponse found = null;
-	
+	ObjectMapper mapper = new ObjectMapper();
 	
 	
 	@Test
@@ -64,38 +72,50 @@ public class UserServiceImplTest {
 		List <UserEntity>users = new ArrayList<UserEntity>();
 		users.add(new UserEntity(new UUID(0,10), "Test1", "test@test.com", "Test12", phones, LocalDateTime.now(), LocalDateTime.now(), true));
 		
-		List<UserResponse> found = new ArrayList<UserResponse>();
+
 		when(userRepository.findAll()).thenReturn(users);
-		found = userService.getUsers();
+		
+		List<UserResponse> found = userService.getUsers();
 		assertThat(found).isNotEmpty();
 	}
+	
 	
 	
 	@Test
 	public void getUserByIdTest() {
 		
 		
-		when(userService.getUserById(userResponse.getId())).thenReturn(userResponse);
+		phones = new ArrayList<PhoneEntity>();
+		Optional<UserEntity> userEntity = Optional.ofNullable(new UserEntity(new UUID(0,10), "Test1", "test@test.com", "Test12", phones, LocalDateTime.now(), LocalDateTime.now(), true));
 		
-		UserResponse foundUser = userService.getUserById(userResponse.getId());
+		when(userRepository.findById(Matchers.any())).thenReturn(userEntity);
 		
-		assertThat(foundUser).isNotNull();
+		UserResponse foundUser = userService.getUserById(userEntity.get().getId());
+		
+		assertNotNull(foundUser);
 	}
+	
 	
 	@Test
 	public void createUserTest() {
 		
 		userRequest = new UserRequest();
-		userRequest.setId(new UUID(0,3));
-		userRequest.setName("test3");
-		userRequest.setPassword("test12");
-		userRequest.setEmail("test3@test.com");
+		userRequest.setId(new UUID(0,10));
+		userRequest.setName("test4");
+		userRequest.setPassword("test14");
+		userRequest.setEmail("test4@test.com");
 		
+//		phones = new ArrayList<PhoneEntity>();
+//		phones.add(new PhoneEntity("1111", "11", "314"));
+////	/	
+//		Optional<UserEntity>  userEntity = Optional.ofNullable(new UserEntity(userRequest.getId(), "Test1", "test@test.com", "Test12", phones, LocalDateTime.now(), LocalDateTime.now(), true));
+
+		when(userRepository.findByEmail(Matchers.any())).thenReturn(null);
 		
-		when(userService.createUser(userRequest)).thenReturn(userResponse);
-		found = userService.createUser(userRequest);
+		userResponse = userService.createUser(userRequest);
 		
-		assertThat(found).isNotNull();
+		verify(userRepository,times(1)).save(Matchers.any());
+		
 		
 	}
 	
@@ -103,18 +123,75 @@ public class UserServiceImplTest {
 	public void updateUserTest() {
 		
 		userRequest = new UserRequest();
+		userRequest.setId(new UUID(0,10));
 		userRequest.setName("test4");
 		userRequest.setPassword("test14");
 		userRequest.setEmail("test4@test.com");
 		
-		ResponseUserStatus responseStatus = new ResponseUserStatus("USR-200", "User TEST  updated!");
+		phones = new ArrayList<PhoneEntity>();
+		phones.add(new PhoneEntity("1111", "11", "314"));
 		
-		when(userService.updateUser(userRequest.getId(), userRequest)).thenReturn(responseStatus);
+		Optional<UserEntity>  userEntity = Optional.ofNullable(new UserEntity(userRequest.getId(), "Test1", "test@test.com", "Test12", phones, LocalDateTime.now(), LocalDateTime.now(), true));
+		
+		when(userRepository.findById(Matchers.any())).thenReturn(userEntity);
+		
+		//ResponseUserStatus responseStatus = new ResponseUserStatus("USR-200", "User TEST  updated!");
+		
 		ResponseUserStatus found = userService.updateUser(userRequest.getId(), userRequest);
 		
-		assertThat(found.getCode().equals("USR-200"));
+		verify(userRepository,times(1)).save(Matchers.any());
 		
 	}
+	
+	
+	@Test
+	public void deleteUserTest() {
+		
+		userRequest = new UserRequest();
+		userRequest.setId(new UUID(0,10));
+		userRequest.setName("test4");
+		userRequest.setPassword("test14");
+		userRequest.setEmail("test4@test.com");
+		
+		phones = new ArrayList<PhoneEntity>();
+		phones.add(new PhoneEntity("1111", "11", "314"));
+		
+		Optional<UserEntity>  userEntity = Optional.ofNullable(new UserEntity(userRequest.getId(), "Test1", "test@test.com", "Test12", phones, LocalDateTime.now(), LocalDateTime.now(), true));
+		
+		when(userRepository.findById(Matchers.any())).thenReturn(userEntity);
+		
+		userService.deleteUser(userRequest.getId());
+		
+		verify(userRepository,times(1)).deleteById(Matchers.any());
+		
+	}
+	
+	
+	@Test()
+	public void createUserErrorTest() {
+		
+		userRequest = new UserRequest();
+		userRequest.setId(new UUID(0,10));
+		userRequest.setName("test4");
+		userRequest.setPassword("test14");
+		userRequest.setEmail("test4@test.com");
+		
+		phones = new ArrayList<PhoneEntity>();
+		phones.add(new PhoneEntity("1111", "11", "314"));
+		
+		UserEntity userEntity = new UserEntity(userRequest.getId(), "Test1", "test@test.com", "Test12", phones, LocalDateTime.now(), LocalDateTime.now(), true);
+		
+		
+		when(userRepository.findByEmail(Matchers.any())).thenReturn(userEntity);
+		
+		assertThatThrownBy(() -> {userService.createUser(userRequest);}).isInstanceOf(UserException.class);
+		
+		verify(userRepository,times(0)).save(Matchers.any());
+		
+		
+		
+	}
+	
 	
 	
 }
